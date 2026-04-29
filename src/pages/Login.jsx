@@ -45,39 +45,8 @@ export function Login() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f6f7f8] px-4 py-8 sm:px-6 lg:grid lg:grid-cols-[1fr_470px] lg:gap-8 lg:px-8">
-      <section className="hidden rounded-lg border border-zinc-200 bg-white p-8 shadow-soft lg:flex lg:flex-col lg:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <img src={brandMark} alt="Assessoria Web" className="h-12 w-12" />
-            <div>
-              <p className="text-lg font-semibold text-zinc-950">Assessoria Web</p>
-              <p className="text-sm text-zinc-500">Acesso da equipe técnica</p>
-            </div>
-          </div>
-
-          <div className="mt-12 max-w-2xl">
-            <p className="text-sm font-semibold uppercase text-emerald-700">
-              Registro de campo
-            </p>
-            <h1 className="mt-3 text-4xl font-semibold text-zinc-950">
-              Lance assessorias com o seu usuário.
-            </h1>
-            <p className="mt-4 text-base leading-7 text-zinc-600">
-              Cada técnico entra com o próprio acesso para registrar visitas,
-              treinamentos, horas e assinaturas do atendimento.
-            </p>
-          </div>
-        </div>
-
-        <img
-          src={dashboardVisit}
-          alt="Ficha digital de assessoria"
-          className="mt-10 max-h-72 w-full object-contain"
-        />
-      </section>
-
-      <section className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-md flex-col justify-center">
+    <main className="min-h-screen bg-[#f6f7f8] px-3 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
+      <section className="hidden rounded-lg border border-zinc-200 bg-white p-8 shadow-soft lg:flex lg:flex-col lg:items-center">
         <div className="rounded-lg border border-zinc-200 bg-white p-6 shadow-soft sm:p-8">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <img src={brandMark} alt="Assessoria Web" className="h-11 w-11" />
@@ -141,28 +110,11 @@ export function Login() {
           </form>
         </div>
 
-        <div className="mt-4 rounded-lg border border-zinc-200 bg-white p-4 shadow-soft">
-          <p className="text-sm font-semibold text-zinc-950">Usuários iniciais</p>
-          <div className="mt-3 grid gap-2">
-            {users.map((user) => (
-              <button
-                key={user.id}
-                type="button"
-                onClick={() => useDemoUser(user)}
-                className="flex items-center justify-between rounded-lg border border-zinc-200 px-3 py-2 text-left text-sm transition hover:bg-zinc-50"
-              >
-                <span>
-                  <span className="font-medium text-zinc-900">{user.name}</span>
-                  <span className="ml-2 text-zinc-500">@{user.username}</span>
-                </span>
-                <span className="text-xs font-medium text-zinc-500">{user.role}</span>
-              </button>
-            ))}
-          </div>
-          <p className="mt-3 text-xs text-zinc-500">
-            Senha dos técnicos: 123456 · admin: admin123
-          </p>
-        </div>
+        <img
+          src={dashboardVisit}
+          alt="Ficha digital de assessoria"
+          className="mt-10 max-h-72 w-full object-contain"
+        />
       </section>
     </main>
   );
