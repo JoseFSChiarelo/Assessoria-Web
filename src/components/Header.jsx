@@ -65,7 +65,7 @@ export function Header({ onMenuClick }) {
             onClick={handleLogout}
             className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
           >
-            <LogOut size={17} />
+            <LogOut size={20} />
             <span className="hidden sm:inline">Sair</span>
           </button>
         </div>

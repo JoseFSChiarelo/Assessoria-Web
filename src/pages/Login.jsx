@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import brandMark from "../assets/brand-mark.svg";
-import dashboardVisit from "../assets/dashboard-visit.svg";
+/*import dashboardVisit from "../assets/dashboard-visit.svg";*/
+import logoexens from "../assets/logo-exens.png";
 import { Button } from "../components/Button.jsx";
 import { users } from "../data/users.js";
 import { useAuth } from "../hooks/useAuth.js";
@@ -111,7 +112,7 @@ export function Login() {
         </div>
 
         <img
-          src={dashboardVisit}
+          src={logoexens}
           alt="Ficha digital de assessoria"
           className="mt-10 max-h-72 w-full object-contain"
         />

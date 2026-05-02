@@ -7,7 +7,8 @@ import {
   X,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import brandMark from "../assets/brand-mark.svg";
+/*import brandMark from "../assets/brand-mark.svg";*/
+import logoexens from "../assets/logo-exens.png";
 
 const navItems = [
   { label: "Dashboard", to: "/", icon: LayoutDashboard },
@@ -33,7 +34,7 @@ export function Sidebar({ open, onClose }) {
       >
         <div className="flex h-20 items-center justify-between border-b border-zinc-200 px-5">
           <NavLink to="/" className="flex items-center gap-3" onClick={onClose}>
-            <img src={brandMark} alt="Assessoria Web" className="h-11 w-11" />
+            <img src={logoexens} alt="Assessoria Web" className="h-11 w-11" />
             <div>
               <p className="text-base font-semibold text-zinc-950">Assessoria Web</p>
               <p className="text-xs font-medium text-zinc-500">Visitas técnicas</p>
@@ -75,10 +76,10 @@ export function Sidebar({ open, onClose }) {
           <div className="rounded-lg bg-zinc-100 p-4">
             <div className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
               <ClipboardList size={18} />
-              Registro local
+              ASSESSORIA EXENS
             </div>
             <p className="mt-2 text-sm leading-5 text-zinc-600">
-              Os dados ficam no navegador até a integração com API.
+              &copy; {new Date().getFullYear()} Exens Assessoria Web
             </p>
           </div>
         </div>

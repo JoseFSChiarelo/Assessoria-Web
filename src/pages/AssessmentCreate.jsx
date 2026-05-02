@@ -1,21 +1,32 @@
-import toast from "react-hot-toast";
+﻿import toast from "react-hot-toast";
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AssessmentForm } from "../components/AssessmentForm.jsx";
 import { useAuth } from "../hooks/useAuth.js";
 import { useAssessments } from "../hooks/useAssessments.js";
 import { nextAssessmentNumber } from "../utils/ids.js";
 
+function getCurrentTimeHHMM() {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, "0");
+  const mm = String(now.getMinutes()).padStart(2, "0");
+  return `${hh}:${mm}`;
+}
+
 export function AssessmentCreate() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { assessments, loading, createAssessment } = useAssessments();
-  const initialData = useMemo(
-    () => ({
+
+  const initialData = useMemo(() => {
+    const prefill = location.state?.prefill || {};
+    return {
       technician: user?.name || "",
-    }),
-    [user?.name],
-  );
+      entryTime: prefill.entryTime || getCurrentTimeHHMM(),
+      ...prefill,
+    };
+  }, [location.state, user?.name]);
 
   const handleSubmit = (data) => {
     const created = createAssessment(data);
@@ -27,6 +38,10 @@ export function AssessmentCreate() {
     navigate(`/assessorias/${created.id}`);
   };
 
+  const handleCancel = () => {
+    navigate("/");
+  };
+
   if (loading) {
     return <div className="rounded-lg bg-white p-6 text-zinc-600">Carregando...</div>;
   }
@@ -36,6 +51,8 @@ export function AssessmentCreate() {
       initialData={initialData}
       nextNumber={nextAssessmentNumber(assessments)}
       onSubmit={handleSubmit}
+      onCancel={handleCancel}
+      wizardModal
     />
   );
 }
