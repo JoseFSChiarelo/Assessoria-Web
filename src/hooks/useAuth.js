@@ -13,8 +13,8 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => authService.getSession());
 
-  const login = useCallback((credentials) => {
-    const session = authService.login(credentials);
+  const login = useCallback(async (credentials) => {
+    const session = await authService.login(credentials);
     setUser(session);
     return session;
   }, []);

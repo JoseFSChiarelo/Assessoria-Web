@@ -28,14 +28,18 @@ export function AssessmentCreate() {
     };
   }, [location.state, user?.name]);
 
-  const handleSubmit = (data) => {
-    const created = createAssessment(data);
-    toast.success(
-      data.status === "rascunho"
-        ? "Rascunho salvo com sucesso."
-        : "Assessoria salva com sucesso.",
-    );
-    navigate(`/assessorias/${created.id}`);
+  const handleSubmit = async (data) => {
+    try {
+      const created = await createAssessment(data);
+      toast.success(
+        data.status === "rascunho"
+          ? "Rascunho salvo com sucesso."
+          : "Assessoria salva com sucesso."
+      );
+      navigate(`/assessorias/${created.id}`);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleCancel = () => {

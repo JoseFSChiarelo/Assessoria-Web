@@ -10,14 +10,18 @@ export function AssessmentEdit() {
   const { assessments, loading, updateAssessment } = useAssessments();
   const assessment = assessments.find((item) => item.id === id);
 
-  const handleSubmit = (data) => {
-    const updated = updateAssessment(id, data);
-    toast.success(
-      data.status === "rascunho"
-        ? "Rascunho atualizado com sucesso."
-        : "Assessoria atualizada com sucesso.",
-    );
-    navigate(`/assessorias/${updated.id}`);
+  const handleSubmit = async (data) => {
+    try {
+      const updated = await updateAssessment(id, data);
+      toast.success(
+        data.status === "rascunho"
+          ? "Rascunho atualizado com sucesso."
+          : "Assessoria atualizada com sucesso."
+      );
+      navigate(`/assessorias/${updated.id}`);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   if (loading) {

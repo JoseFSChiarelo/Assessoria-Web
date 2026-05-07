@@ -6,7 +6,6 @@ import brandMark from "../assets/brand-mark.svg";
 /*import dashboardVisit from "../assets/dashboard-visit.svg";*/
 import logoexens from "../assets/logo-exens.png";
 import { Button } from "../components/Button.jsx";
-import { users } from "../data/users.js";
 import { useAuth } from "../hooks/useAuth.js";
 
 const fieldClass =
@@ -29,20 +28,16 @@ export function Login() {
     setCredentials((current) => ({ ...current, [field]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const session = login(credentials);
+      const session = await login(credentials);
       toast.success(`Bem-vindo, ${session.name}.`);
       navigate(from, { replace: true });
     } catch (error) {
       toast.error(error.message);
     }
-  };
-
-  const useDemoUser = (user) => {
-    setCredentials({ username: user.username, password: user.password });
   };
 
   return (

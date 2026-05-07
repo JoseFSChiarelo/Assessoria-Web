@@ -1,11 +1,4 @@
-import {
-  Copy,
-  Download,
-  Edit3,
-  FileText,
-  Printer,
-  Trash2,
-} from "lucide-react";
+import { Copy, Download, Edit3, FileText, Printer, Trash2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
@@ -14,11 +7,7 @@ import { ConfirmModal } from "../components/ConfirmModal.jsx";
 import { PrintLayout } from "../components/PrintLayout.jsx";
 import { StatusBadge } from "../components/StatusBadge.jsx";
 import { useAssessments } from "../hooks/useAssessments.js";
-import {
-  formatDate,
-  formatDateTime,
-  formatVisitType,
-} from "../utils/formatters.js";
+import { formatDate, formatDateTime, formatVisitType } from "../utils/formatters.js";
 import { exportElementToPdf } from "../utils/pdf.js";
 import { formatDuration } from "../utils/time.js";
 
@@ -35,9 +24,7 @@ function TextBlock({ title, value }) {
   return (
     <section className="rounded-lg border border-zinc-200 bg-white p-5">
       <h3 className="text-sm font-semibold uppercase text-zinc-500">{title}</h3>
-      <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-zinc-700">
-        {value || "-"}
-      </p>
+      <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-zinc-700">{value || "-"}</p>
     </section>
   );
 }
@@ -60,54 +47,52 @@ function SignaturePreview({ label, signature }) {
 export function AssessmentView() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const {
-    assessments,
-    loading,
-    duplicateAssessment,
-    markPrinted,
-    removeAssessment,
-  } = useAssessments();
+  const { assessments, loading, duplicateAssessment, markPrinted, removeAssessment } = useAssessments();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const assessment = assessments.find((item) => item.id === id);
 
-  if (loading) {
-    return <div className="rounded-lg bg-white p-6 text-zinc-600">Carregando...</div>;
-  }
-
-  if (!assessment) {
-    return <Navigate to="/404" replace />;
-  }
+  if (loading) return <div className="rounded-lg bg-white p-6 text-zinc-600">Carregando...</div>;
+  if (!assessment) return <Navigate to="/404" replace />;
 
   const printElementId = `print-layout-${assessment.id}`;
 
-  const handleDuplicate = () => {
-    const duplicated = duplicateAssessment(assessment.id);
-    if (!duplicated) return;
-    toast.success("Assessoria duplicada como rascunho.");
-    navigate(`/assessorias/${duplicated.id}/editar`);
+  const handleDuplicate = async () => {
+    try {
+      const duplicated = await duplicateAssessment(assessment.id);
+      if (!duplicated) return;
+      toast.success("Assessoria duplicada como rascunho.");
+      navigate(`/assessorias/${duplicated.id}/editar`);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  const handleDelete = () => {
-    removeAssessment(assessment.id);
-    toast.success("Assessoria excluída.");
-    navigate("/assessorias");
+  const handleDelete = async () => {
+    try {
+      await removeAssessment(assessment.id);
+      toast.success("Assessoria excluida.");
+      navigate("/assessorias");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
-  const handlePrint = () => {
-    markPrinted(assessment.id);
-    toast.success("Ficha marcada como impressa.");
-    window.setTimeout(() => window.print(), 150);
+  const handlePrint = async () => {
+    try {
+      await markPrinted(assessment.id);
+      toast.success("Ficha marcada como impressa.");
+      window.setTimeout(() => window.print(), 150);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handlePdf = () => {
-    toast.promise(
-      exportElementToPdf(printElementId, `${assessment.number || "assessoria"}.pdf`),
-      {
-        loading: "Gerando PDF...",
-        success: "PDF gerado.",
-        error: "Não foi possível gerar o PDF.",
-      },
-    );
+    toast.promise(exportElementToPdf(printElementId, `${assessment.number || "assessoria"}.pdf`), {
+      loading: "Gerando PDF...",
+      success: "PDF gerado.",
+      error: "Nao foi possivel gerar o PDF."
+    });
   };
 
   return (
@@ -117,14 +102,10 @@ export function AssessmentView() {
           <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-3">
-                <p className="text-sm font-semibold uppercase text-emerald-700">
-                  {assessment.number}
-                </p>
+                <p className="text-sm font-semibold uppercase text-emerald-700">{assessment.number}</p>
                 <StatusBadge status={assessment.status} />
               </div>
-              <h2 className="mt-3 text-2xl font-semibold text-zinc-950">
-                {assessment.client}
-              </h2>
+              <h2 className="mt-3 text-2xl font-semibold text-zinc-950">{assessment.client}</h2>
               <p className="mt-1 text-sm text-zinc-500">{assessment.company}</p>
             </div>
 
@@ -162,12 +143,12 @@ export function AssessmentView() {
             <DetailItem label="Data" value={formatDate(assessment.date)} />
             <DetailItem label="Tipo de atendimento" value={formatVisitType(assessment.visitType)} />
             <DetailItem label="Entrada" value={assessment.entryTime} />
-            <DetailItem label="Saída" value={assessment.exitTime} />
+            <DetailItem label="Saida" value={assessment.exitTime} />
             <DetailItem label="Total de horas" value={formatDuration(assessment.totalHours)} />
             <DetailItem label="Local" value={assessment.location} />
-            <DetailItem label="Módulo/Sistema" value={assessment.module} />
-            <DetailItem label="Técnico responsável" value={assessment.technician} />
-            <DetailItem label="Responsável no cliente" value={assessment.clientResponsible} />
+            <DetailItem label="Modulo/Sistema" value={assessment.module} />
+            <DetailItem label="Tecnico responsavel" value={assessment.technician} />
+            <DetailItem label="Responsavel no cliente" value={assessment.clientResponsible} />
             <DetailItem label="Criado em" value={formatDateTime(assessment.createdAt)} />
             <DetailItem label="Atualizado em" value={formatDateTime(assessment.updatedAt)} />
           </dl>
@@ -175,28 +156,19 @@ export function AssessmentView() {
 
         <div className="grid gap-4 lg:grid-cols-2">
           <TextBlock title="Treinamento realizado" value={assessment.trainingDone} />
-          <TextBlock
-            title="Descrição detalhada do que foi feito"
-            value={assessment.detailedDescription}
-          />
+          <TextBlock title="Descricao detalhada do que foi feito" value={assessment.detailedDescription} />
           <TextBlock title="Problemas encontrados" value={assessment.problems} />
-          <TextBlock title="Soluções aplicadas" value={assessment.solutions} />
-          <TextBlock title="Pendências" value={assessment.pending} />
-          <TextBlock title="Próximos passos" value={assessment.nextSteps} />
+          <TextBlock title="Solucoes aplicadas" value={assessment.solutions} />
+          <TextBlock title="Pendencias" value={assessment.pending} />
+          <TextBlock title="Proximos passos" value={assessment.nextSteps} />
           <div className="lg:col-span-2">
-            <TextBlock title="Observações gerais" value={assessment.notes} />
+            <TextBlock title="Observacoes gerais" value={assessment.notes} />
           </div>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          <SignaturePreview
-            label="Assinatura do técnico"
-            signature={assessment.technicianSignature}
-          />
-          <SignaturePreview
-            label="Assinatura do cliente"
-            signature={assessment.clientSignature}
-          />
+          <SignaturePreview label="Assinatura do tecnico" signature={assessment.technicianSignature} />
+          <SignaturePreview label="Assinatura do cliente" signature={assessment.clientSignature} />
         </div>
       </div>
 
@@ -207,7 +179,7 @@ export function AssessmentView() {
       <ConfirmModal
         open={confirmOpen}
         title="Excluir assessoria"
-        description="Este registro será removido do armazenamento local. A ação não poderá ser desfeita."
+        description="Este registro sera removido do banco. A acao nao podera ser desfeita."
         confirmLabel="Excluir"
         onConfirm={handleDelete}
         onClose={() => setConfirmOpen(false)}
