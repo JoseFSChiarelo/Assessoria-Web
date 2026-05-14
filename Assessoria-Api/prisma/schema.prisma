@@ -1,13 +1,72 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
+}
+
+model ACESSORIA {
+  ID_ACESSORIA                       Int     @id @default(autoincrement())
+  TITULO                             String  @db.VarChar(300)
+  USUARIO                            Int
+  CLIENTE                            Int
+  DATA                               String? @db.VarChar(59)
+  DETALHES                           String? @db.VarChar(5000)
+  CLIENTE_ACESSORIA_CLIENTEToCLIENTE CLIENTE @relation("ACESSORIA_CLIENTEToCLIENTE", fields: [CLIENTE], references: [ID_CLIENTE], onDelete: Cascade, map: "FK_CLIENTE")
+  USUARIO_ACESSORIA_USUARIOToUSUARIO USUARIO @relation("ACESSORIA_USUARIOToUSUARIO", fields: [USUARIO], references: [ID_USUARIO], onDelete: Cascade, map: "FK_USUARIO")
+
+  @@index([CLIENTE], map: "FK_CLIENTE")
+  @@index([USUARIO], map: "FK_USUARIO")
+}
+
+model CLIENTE {
+  ID_CLIENTE                           Int         @id @default(autoincrement())
+  NOME                                 String      @db.VarChar(100)
+  ACESSORIA_ACESSORIA_CLIENTEToCLIENTE ACESSORIA[] @relation("ACESSORIA_CLIENTEToCLIENTE")
+}
+
+model USUARIO {
+  ID_USUARIO                           Int         @id @default(autoincrement())
+  LOGIN                                String      @db.VarChar(100)
+  SENHA                                String      @db.VarChar(100)
+  ACESSORIA_ACESSORIA_USUARIOToUSUARIO ACESSORIA[] @relation("ACESSORIA_USUARIOToUSUARIO")
+}
+
+model assessments {
+  id                   String             @id @db.Char(36)
+  client_name          String             @db.VarChar(255)
+  advisor_name         String             @db.VarChar(255)
+  status               assessments_status @default(rascunho)
+  notes                String?            @db.Text
+  created_at           DateTime           @db.DateTime(0)
+  updated_at           DateTime           @db.DateTime(0)
+  number               String             @default("") @db.VarChar(50)
+  date                 DateTime?          @db.Date
+  client               String             @default("") @db.VarChar(255)
+  company              String             @default("") @db.VarChar(255)
+  client_responsible   String             @default("") @db.VarChar(255)
+  technician           String             @default("") @db.VarChar(255)
+  visit_type           String             @default("") @db.VarChar(100)
+  entry_time           String?            @db.VarChar(5)
+  exit_time            String?            @db.VarChar(5)
+  total_hours          Decimal            @default(0.00) @db.Decimal(10, 2)
+  location             String?            @db.VarChar(255)
+  module               String             @default("") @db.VarChar(255)
+  training_done        String?            @db.Text
+  detailed_description String             @db.Text
+  problems             String?            @db.Text
+  solutions            String?            @db.Text
+  pending              String?            @db.Text
+  next_steps           String?            @db.Text
+  technician_signature String?            @db.LongText
+  client_signature     String?            @db.LongText
+}
+
+enum assessments_status {
+  rascunho
+  finalizada
+  assinada
+  impressa
 }

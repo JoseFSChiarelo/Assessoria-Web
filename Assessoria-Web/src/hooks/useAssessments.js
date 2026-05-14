@@ -5,57 +5,59 @@ export function useAssessments() {
   const [assessments, setAssessments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const refresh = useCallback(() => {
-    setAssessments(assessmentRepository.list());
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    const data = await assessmentRepository.list();
+    setAssessments(data);
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    refresh();
+    refresh().catch(() => setLoading(false));
   }, [refresh]);
 
   const createAssessment = useCallback(
-    (data) => {
-      const created = assessmentRepository.create(data);
-      refresh();
+    async (data) => {
+      const created = await assessmentRepository.create(data);
+      await refresh();
       return created;
     },
-    [refresh],
+    [refresh]
   );
 
   const updateAssessment = useCallback(
-    (id, data) => {
-      const updated = assessmentRepository.update(id, data);
-      refresh();
+    async (id, data) => {
+      const updated = await assessmentRepository.update(id, data);
+      await refresh();
       return updated;
     },
-    [refresh],
+    [refresh]
   );
 
   const removeAssessment = useCallback(
-    (id) => {
-      assessmentRepository.remove(id);
-      refresh();
+    async (id) => {
+      await assessmentRepository.remove(id);
+      await refresh();
     },
-    [refresh],
+    [refresh]
   );
 
   const duplicateAssessment = useCallback(
-    (id) => {
-      const duplicated = assessmentRepository.duplicate(id);
-      refresh();
+    async (id) => {
+      const duplicated = await assessmentRepository.duplicate(id);
+      await refresh();
       return duplicated;
     },
-    [refresh],
+    [refresh]
   );
 
   const markPrinted = useCallback(
-    (id) => {
-      const updated = assessmentRepository.markPrinted(id);
-      refresh();
+    async (id) => {
+      const updated = await assessmentRepository.markPrinted(id);
+      await refresh();
       return updated;
     },
-    [refresh],
+    [refresh]
   );
 
   return {
@@ -66,6 +68,6 @@ export function useAssessments() {
     updateAssessment,
     removeAssessment,
     duplicateAssessment,
-    markPrinted,
+    markPrinted
   };
 }

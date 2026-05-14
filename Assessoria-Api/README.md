@@ -1,21 +1,43 @@
-# bun-react-tailwind-template
+# Assessoria API
 
-To install dependencies:
+Backend em Node.js + Express com arquitetura modular:
 
-```bash
-bun install
-```
+- `src/modules/*`: dominio (controller, service, repository, schema)
+- `src/middlewares/*`: auth, validacao, erros
+- `src/config/*`: ambiente
+- `src/routes/*`: agregacao de rotas
 
-To start a development server:
-
-```bash
-bun dev
-```
-
-To run for production:
+## Executar local
 
 ```bash
-bun start
+cd C:\Assesoria Online\Assessoria-API
+npm install
+npm run dev
 ```
 
-This project was created using `bun init` in bun v1.3.13. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+API local: `http://localhost:3333`
+
+## Variaveis
+
+Use `.env` com base no `.env.example`.
+
+- `DB_HOST`
+- `DB_PORT`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_NAME`
+
+## Rotas
+
+- `GET /health`
+- `POST /api/auth/login`
+- `GET /api/assessments` (Bearer token)
+- `GET /api/assessments/:id` (Bearer token)
+- `POST /api/assessments` (Bearer token)
+- `PUT /api/assessments/:id` (Bearer token)
+- `DELETE /api/assessments/:id` (Bearer token)
+
+## Login dev
+
+- email: `admin@exens.com.br`
+- senha: `123456`

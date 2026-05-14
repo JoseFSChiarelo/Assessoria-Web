@@ -6,7 +6,6 @@ import brandMark from "../assets/brand-mark.svg";
 /*import dashboardVisit from "../assets/dashboard-visit.svg";*/
 import logoexens from "../assets/logo-exens.png";
 import { Button } from "../components/Button.jsx";
-import { users } from "../data/users.js";
 import { useAuth } from "../hooks/useAuth.js";
 
 const fieldClass =
@@ -29,11 +28,11 @@ export function Login() {
     setCredentials((current) => ({ ...current, [field]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      const session = login(credentials);
+      const session = await login(credentials);
       toast.success(`Bem-vindo, ${session.name}.`);
       navigate(from, { replace: true });
     } catch (error) {
@@ -41,13 +40,9 @@ export function Login() {
     }
   };
 
-  const useDemoUser = (user) => {
-    setCredentials({ username: user.username, password: user.password });
-  };
-
   return (
     <main className="min-h-screen bg-[#f6f7f8] px-3 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
-      <section className="hidden rounded-lg border border-zinc-200 bg-white p-8 shadow-soft lg:flex lg:flex-col lg:items-center">
+      <section className="flex flex-col rounded-lg border border-zinc-200 bg-white p-8 shadow-soft lg:items-center ">
         <div className="rounded-lg border border-zinc-200 bg-white p-6 shadow-soft sm:p-8">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <img src={brandMark} alt="Assessoria Web" className="h-11 w-11" />
