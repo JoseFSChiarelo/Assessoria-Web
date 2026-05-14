@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3333/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3334/api";
 const TOKEN_KEY = "assessoria_web_token_v1";
 
 function getToken() {

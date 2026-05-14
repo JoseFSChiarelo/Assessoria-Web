@@ -42,7 +42,7 @@ export function Login() {
 
   return (
     <main className="min-h-screen bg-[#f6f7f8] px-3 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
-      <section className="hidden rounded-lg border border-zinc-200 bg-white p-8 shadow-soft lg:flex lg:flex-col lg:items-center">
+      <section className="flex flex-col rounded-lg border border-zinc-200 bg-white p-8 shadow-soft lg:items-center ">
         <div className="rounded-lg border border-zinc-200 bg-white p-6 shadow-soft sm:p-8">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <img src={brandMark} alt="Assessoria Web" className="h-11 w-11" />

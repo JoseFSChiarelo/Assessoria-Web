@@ -24,7 +24,8 @@ export const authService = {
   },
 
   async login({ username, password }) {
-    const data = await api.request("/auth/login", {
+    try {
+      const data = await api.request("/auth/login", {
       method: "POST",
       body: { username, password }
     });
@@ -37,6 +38,11 @@ export const authService = {
     api.setToken(data.token);
     getStorage()?.setItem(SESSION_KEY, JSON.stringify(session));
     return session;
+    } catch (error) { 
+      console.log("Login error:", error);
+      throw error instanceof Error ? error : new Error("Erro desconhecido");
+    }
+  
   },
 
   logout() {

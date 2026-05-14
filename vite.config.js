@@ -6,5 +6,12 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 5173,
+    allowedHosts: ["assessoria.exens.com.br"],
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:3334",
+        changeOrigin: true,
+      },
+    },
   },
 });
