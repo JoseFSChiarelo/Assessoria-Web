@@ -11,7 +11,7 @@ const optionalClientId = z.preprocess(
 const assessmentBody = z.object({
   number: z.string().min(1, "Numero obrigatorio"),
   date: z.string().min(1, "Data obrigatoria"),
-  client: z.string().min(1, "Cliente obrigatorio"),
+  client: z.string().optional().default(""),
   clientId: optionalClientId,
   company: z.string().min(1, "Empresa obrigatoria"),
   clientResponsible: z.string().min(1, "Responsavel obrigatorio"),
@@ -21,7 +21,7 @@ const assessmentBody = z.object({
   exitTime: z.string().optional().default(""),
   totalHours: z.coerce.number().optional().default(0),
   location: z.string().optional().default(""),
-  module: z.string().min(1, "Modulo obrigatorio"),
+  module: z.string().optional().default(""),
   trainingDone: z.string().optional().default(""),
   detailedDescription: z.string().min(1, "Descricao obrigatoria"),
   problems: z.string().optional().default(""),

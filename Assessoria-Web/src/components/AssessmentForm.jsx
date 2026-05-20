@@ -1,8 +1,8 @@
-﻿import { Save, Send } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { Save, Send } from "lucide-react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { statusOptions, systemModules, visitTypes } from "../data/options.js";
-import { calculateTotalHours, formatDuration } from "../utils/time.js";
+import { visitTypes } from "../data/options.js";
+import { calculateTotalHours } from "../utils/time.js";
 import { Button } from "./Button.jsx";
 import { SignatureBlock } from "./SignatureBlock.jsx";
 
@@ -27,7 +27,6 @@ function emptyAssessment(number) {
   return {
     number: number || "",
     date: today(),
-    client: "",
     company: "",
     clientResponsible: "",
     technician: "",
@@ -36,14 +35,9 @@ function emptyAssessment(number) {
     exitTime: "",
     totalHours: 0,
     location: "",
-    module: "",
-    trainingDone: "",
     detailedDescription: "",
     problems: "",
-    solutions: "",
     pending: "",
-    nextSteps: "",
-    notes: "",
     technicianSignature: "",
     clientSignature: "",
     status: "rascunho",
@@ -63,13 +57,11 @@ function validate(form, strict) {
   const requiredFields = {
     number: "Informe o numero da assessoria.",
     date: "Informe a data.",
-    client: "Informe o cliente.",
     company: "Informe a empresa.",
     clientResponsible: "Informe o responsavel no cliente.",
     technician: "Informe o tecnico responsavel.",
     visitType: "Informe o tipo de atendimento.",
     entryTime: "Informe o horario de entrada.",
-    module: "Informe o modulo ou sistema abordado.",
     detailedDescription: "Descreva o que foi feito.",
   };
 
@@ -151,11 +143,6 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [wizardModal, onCancel]);
 
-  const totalHours = useMemo(
-    () => calculateTotalHours(form.entryTime, form.exitTime),
-    [form.entryTime, form.exitTime],
-  );
-
   const updateField = (field, value) => {
     setForm((current) => {
       const next = { ...current, [field]: value };
@@ -172,15 +159,13 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
       1: {
         number: "Informe o numero da assessoria.",
         date: "Informe a data.",
-        client: "Informe o cliente.",
-        company: "Informe a empresa.",
-        clientResponsible: "Informe o responsavel no cliente.",
+        entryTime: "Informe o horario.",
         technician: "Informe o tecnico responsavel.",
         visitType: "Informe o tipo de atendimento.",
       },
       2: {
-        entryTime: "Informe o horario de entrada.",
-        module: "Informe o modulo ou sistema abordado.",
+        company: "Informe a empresa.",
+        clientResponsible: "Informe o responsavel do cliente.",
       },
       3: {
         detailedDescription: "Descreva o que foi feito.",
@@ -260,9 +245,9 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
       {step === 1 ? (
         <Section
           title="Dados gerais"
-          description="Identificacao da assessoria, cliente, empresa e responsavel."
+          description="Identificacao da assessoria, data, horario, tecnicos e tipo."
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <Input
               label="Numero da assessoria"
               value={form.number}
@@ -278,28 +263,14 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
               error={errors.date}
             />
             <Input
-              label="Cliente"
-              value={form.client}
-              onChange={(event) => updateField("client", event.target.value)}
-              error={errors.client}
-              placeholder="Nome do cliente"
+              label="Horario"
+              type="time"
+              value={form.entryTime}
+              onChange={(event) => updateField("entryTime", event.target.value)}
+              error={errors.entryTime}
             />
             <Input
-              label="Empresa"
-              value={form.company}
-              onChange={(event) => updateField("company", event.target.value)}
-              error={errors.company}
-              placeholder="Razao social ou unidade"
-            />
-            <Input
-              label="Responsavel no cliente"
-              value={form.clientResponsible}
-              onChange={(event) => updateField("clientResponsible", event.target.value)}
-              error={errors.clientResponsible}
-              placeholder="Nome do responsavel"
-            />
-            <Input
-              label="Tecnico responsavel"
+              label="Tecnicos"
               value={form.technician}
               onChange={(event) => updateField("technician", event.target.value)}
               error={errors.technician}
@@ -317,67 +288,37 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
                 </option>
               ))}
             </Select>
-            <Select
-              label="Status"
-              value={form.status}
-              onChange={(event) => updateField("status", event.target.value)}
-            >
-              {statusOptions.map((status) => (
-                <option key={status.value} value={status.value}>
-                  {status.label}
-                </option>
-              ))}
-            </Select>
           </div>
         </Section>
       ) : null}
 
       {step === 2 ? (
         <Section
-          title="Horarios e local"
-          description="O total de horas e calculado automaticamente pela entrada e saida."
+          title="Dados da visita"
+          description="Empresa, local da visita e responsavel do cliente."
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <Input
-              label="Horario de entrada"
-              type="time"
-              value={form.entryTime}
-              onChange={(event) => updateField("entryTime", event.target.value)}
-              error={errors.entryTime}
+              label="Empresa"
+              value={form.company}
+              onChange={(event) => updateField("company", event.target.value)}
+              error={errors.company}
+              placeholder="Razao social ou unidade"
             />
-            <Input
-              label="Horario de saida"
-              type="time"
-              value={form.exitTime}
-              onChange={(event) => updateField("exitTime", event.target.value)}
-              error={errors.exitTime}
-            />
-            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800">
-              <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total calculado</span>
-              <strong className="mt-2 block text-2xl font-semibold text-zinc-950 dark:text-zinc-100">
-                {formatDuration(totalHours)}
-              </strong>
-            </div>
             <Input
               label="Local da visita"
               value={form.location}
               onChange={(event) => updateField("location", event.target.value)}
+              error={errors.location}
               placeholder="Cidade, unidade ou endereco"
             />
-            <Field label="Modulo/Sistema abordado" error={errors.module}>
-              <input
-                className={fieldClass}
-                list="system-modules"
-                value={form.module}
-                onChange={(event) => updateField("module", event.target.value)}
-                placeholder="Selecione ou digite"
-              />
-              <datalist id="system-modules">
-                {systemModules.map((module) => (
-                  <option key={module} value={module} />
-                ))}
-              </datalist>
-            </Field>
+            <Input
+              label="Responsavel do cliente"
+              value={form.clientResponsible}
+              onChange={(event) => updateField("clientResponsible", event.target.value)}
+              error={errors.clientResponsible}
+              placeholder="Nome do responsavel"
+            />
           </div>
         </Section>
       ) : null}
@@ -385,15 +326,9 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
       {step === 3 ? (
         <Section
           title="Conteudo da visita"
-          description="Registre o que foi realizado, treinamentos, problemas e solucoes."
+          description="Registre descricao detalhada, problemas encontrados e pendencias."
         >
           <div className="grid gap-4 lg:grid-cols-2">
-            <Textarea
-              label="Treinamento realizado"
-              value={form.trainingDone}
-              onChange={(event) => updateField("trainingDone", event.target.value)}
-              placeholder="Treinamentos passados ao cliente"
-            />
             <Textarea
               label="Descricao detalhada do que foi feito"
               value={form.detailedDescription}
@@ -405,34 +340,16 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
               label="Problemas encontrados"
               value={form.problems}
               onChange={(event) => updateField("problems", event.target.value)}
+              error={errors.problems}
               placeholder="Dificuldades, falhas ou bloqueios identificados"
-            />
-            <Textarea
-              label="Solucoes aplicadas"
-              value={form.solutions}
-              onChange={(event) => updateField("solutions", event.target.value)}
-              placeholder="Correcao, parametrizacao ou orientacoes"
             />
             <Textarea
               label="Pendencias"
               value={form.pending}
               onChange={(event) => updateField("pending", event.target.value)}
+              error={errors.pending}
               placeholder="Itens que dependem do cliente ou da equipe"
             />
-            <Textarea
-              label="Proximos passos"
-              value={form.nextSteps}
-              onChange={(event) => updateField("nextSteps", event.target.value)}
-              placeholder="Plano para continuidade"
-            />
-            <div className="lg:col-span-2">
-              <Textarea
-                label="Observacoes gerais"
-                value={form.notes}
-                onChange={(event) => updateField("notes", event.target.value)}
-                placeholder="Informacoes complementares"
-              />
-            </div>
           </div>
         </Section>
       ) : null}
