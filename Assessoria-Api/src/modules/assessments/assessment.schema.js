@@ -1,9 +1,18 @@
 import { z } from "zod";
 
+const optionalClientId = z.preprocess(
+  (value) => {
+    if (value === "") return undefined;
+    return value;
+  },
+  z.string().uuid("Cliente invalido").optional()
+);
+
 const assessmentBody = z.object({
   number: z.string().min(1, "Numero obrigatorio"),
   date: z.string().min(1, "Data obrigatoria"),
   client: z.string().min(1, "Cliente obrigatorio"),
+  clientId: optionalClientId,
   company: z.string().min(1, "Empresa obrigatoria"),
   clientResponsible: z.string().min(1, "Responsavel obrigatorio"),
   technician: z.string().min(1, "Tecnico obrigatorio"),

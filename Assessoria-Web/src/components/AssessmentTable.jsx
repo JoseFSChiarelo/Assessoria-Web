@@ -26,52 +26,47 @@ export function AssessmentTable({
   }, [assessments, page, pageSize, showPagination]);
 
   return (
-    <section className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-soft">
+    <section className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-soft dark:border-zinc-800 dark:bg-zinc-900">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-zinc-200">
-          <thead className="bg-zinc-50">
+        <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+          <thead className="bg-zinc-50 dark:bg-zinc-800">
             <tr>
-              {[
-                "Número",
-                "Data",
-                "Cliente",
-                "Técnico",
-                "Tipo",
-                "Horas",
-                "Status",
-                "",
-              ].map((heading) => (
-                <th
-                  key={heading}
-                  className="px-4 py-3 text-left text-xs font-semibold uppercase text-zinc-500"
-                >
-                  {heading}
-                </th>
-              ))}
+              {["Número", "Data", "Cliente", "Técnico", "Tipo", "Horas", "Status", ""].map(
+                (heading) => (
+                  <th
+                    key={heading}
+                    className="px-4 py-3 text-left text-xs font-semibold uppercase text-zinc-500 dark:text-zinc-400"
+                  >
+                    {heading}
+                  </th>
+                ),
+              )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-100 bg-white">
+          <tbody className="divide-y divide-zinc-100 bg-white dark:divide-zinc-800 dark:bg-zinc-900">
             {visibleAssessments.map((assessment) => (
-              <tr key={assessment.id} className="hover:bg-zinc-50">
-                <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold text-zinc-950">
+              <tr key={assessment.id} className="hover:bg-zinc-50 dark:hover:bg-zinc-800/70">
+                <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
                   {assessment.number}
                 </td>
-                <td className="whitespace-nowrap px-4 py-4 text-sm text-zinc-600">
+                <td className="whitespace-nowrap px-4 py-4 text-sm text-zinc-600 dark:text-zinc-300">
                   {formatDate(assessment.date)}
                 </td>
                 <td className="min-w-52 px-4 py-4">
-                  <p className="text-sm font-medium text-zinc-900">
+                  <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                     {assessment.client}
                   </p>
-                  <p className="mt-1 text-xs text-zinc-500">{assessment.company}</p>
+                  <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                    {assessment.company}
+                  </p>
                 </td>
-                <td className="whitespace-nowrap px-4 py-4 text-sm text-zinc-600">
+                <td className="whitespace-nowrap px-4 py-4 text-sm text-zinc-600 dark:text-zinc-300">
                   {assessment.technician}
                 </td>
-                <td className="whitespace-nowrap px-4 py-4 text-sm text-zinc-600">
+                <td className="whitespace-nowrap px-4 py-4 text-sm text-zinc-600 dark:text-zinc-300">
                   {formatVisitType(assessment.visitType)}
                 </td>
-                <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-zinc-900">
+                <td className="whitespace-nowrap px-4 py-4 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                   {formatDuration(assessment.totalHours)}
                 </td>
                 <td className="whitespace-nowrap px-4 py-4">
@@ -91,13 +86,13 @@ export function AssessmentTable({
 
       {!visibleAssessments.length ? (
         <div className="px-4 py-12 text-center">
-          <p className="text-sm font-medium text-zinc-600">{emptyMessage}</p>
+          <p className="text-sm font-medium text-zinc-600 dark:text-zinc-300">{emptyMessage}</p>
         </div>
       ) : null}
 
       {showPagination && assessments.length > pageSize ? (
-        <div className="flex flex-col gap-3 border-t border-zinc-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-zinc-500">
+        <div className="flex flex-col gap-3 border-t border-zinc-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-between dark:border-zinc-800">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Página {page} de {pageCount} · {assessments.length} registros
           </p>
           <div className="flex gap-2">

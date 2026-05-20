@@ -1,47 +1,27 @@
 import jwt from "jsonwebtoken";
 import { env } from "../../config/env.js";
 import { ApiError } from "../../utils/api-error.js";
+import bcrypt from "bcryptjs";
+import { pool } from "../../config/database.js";
 
-const users = [
-  {
-    id: "user-rafael",
-    name: "Rafael Costa",
-    username: "rafael",
-    email: "rafael@exens.com.br",
-    password: "123456",
-    role: "Tecnico"
-  },
-  {
-    id: "user-marina",
-    name: "Marina Souza",
-    username: "marina",
-    email: "marina@exens.com.br",
-    password: "123456",
-    role: "Tecnica"
-  },
-  {
-    id: "user-diego",
-    name: "Diego Ramos",
-    username: "diego",
-    email: "diego@exens.com.br",
-    password: "123456",
-    role: "Tecnico"
-  },
-  {
-    id: "user-admin",
-    name: "Equipe Assessoria",
-    username: "admin",
-    email: "admin@exens.com.br",
-    password: "admin123",
-    role: "Administrador"
-  }
-];
-
-function login(username, password) {
+async function login(username, password) {
   const normalizedUsername = String(username || "").trim().toLowerCase();
-  const user = users.find((item) => item.username.toLowerCase() === normalizedUsername);
+  const [rows] = await pool.query(
+    `SELECT id, username, name, email, role, password_hash
+     FROM users
+     WHERE LOWER(username) = ?
+     LIMIT 1`,
+    [normalizedUsername]
+  );
 
-  if (!user || user.password !== password) {
+  if (rows.length === 0) {
+    throw new ApiError(401, "Credenciais invalidas");
+  }
+
+  const user = rows[0];
+  const isValidPassword = await bcrypt.compare(String(password || ""), user.password_hash);
+
+  if (!isValidPassword) {
     throw new ApiError(401, "Credenciais invalidas");
   }
 

@@ -7,10 +7,10 @@ import { Button } from "./Button.jsx";
 import { SignatureBlock } from "./SignatureBlock.jsx";
 
 const fieldClass =
-  "mt-1 h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100";
+  "mt-1 h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-emerald-900/40";
 
 const textareaClass =
-  "mt-1 min-h-28 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100";
+  "mt-1 min-h-28 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-emerald-900/40";
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -84,7 +84,7 @@ function validate(form, strict) {
 function Field({ label, error, children }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-zinc-700">{label}</span>
+      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">{label}</span>
       {children}
       {error ? <span className="mt-1 block text-xs text-rose-600">{error}</span> : null}
     </label>
@@ -119,10 +119,10 @@ function Textarea({ label, error, ...props }) {
 
 function Section({ title, description, children }) {
   return (
-    <section className="border-b border-zinc-200 p-5 last:border-b-0 sm:p-6">
+    <section className="border-b border-zinc-200 p-5 last:border-b-0 sm:p-6 dark:border-zinc-800">
       <div className="mb-5 max-w-3xl">
-        <h2 className="text-lg font-semibold text-zinc-950">{title}</h2>
-        {description ? <p className="mt-1 text-sm text-zinc-500">{description}</p> : null}
+        <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-100">{title}</h2>
+        {description ? <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{description}</p> : null}
       </div>
       {children}
     </section>
@@ -239,17 +239,17 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
   };
 
   const formContent = (
-    <form className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-soft">
-      <div className="border-b border-zinc-200 bg-zinc-50 px-5 py-4 sm:px-6">
+    <form className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-soft dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="border-b border-zinc-200 bg-zinc-50 px-5 py-4 sm:px-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Passo {step} de 4</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Passo {step} de 4</p>
           {onCancel ? (
             <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
               Sair
             </Button>
           ) : null}
         </div>
-        <div className="mt-2 h-2 w-full rounded-full bg-zinc-200">
+        <div className="mt-2 h-2 w-full rounded-full bg-zinc-200 dark:bg-zinc-700">
           <div
             className="h-2 rounded-full bg-emerald-600 transition-all duration-300"
             style={{ width: `${(step / 4) * 100}%` }}
@@ -352,9 +352,9 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
               onChange={(event) => updateField("exitTime", event.target.value)}
               error={errors.exitTime}
             />
-            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-              <span className="text-sm font-medium text-zinc-500">Total calculado</span>
-              <strong className="mt-2 block text-2xl font-semibold text-zinc-950">
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800">
+              <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total calculado</span>
+              <strong className="mt-2 block text-2xl font-semibold text-zinc-950 dark:text-zinc-100">
                 {formatDuration(totalHours)}
               </strong>
             </div>
@@ -459,7 +459,7 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
         </Section>
       ) : null}
 
-      <div className="flex flex-col gap-3 border-t border-zinc-200 bg-zinc-50 p-5 sm:flex-row sm:justify-end">
+      <div className="flex flex-col gap-3 border-t border-zinc-200 bg-zinc-50 p-5 sm:flex-row sm:justify-end dark:border-zinc-800 dark:bg-zinc-900">
         {step > 1 ? (
           <Button type="button" variant="secondary" onClick={() => setStep((s) => Math.max(1, s - 1))}>
             Voltar
@@ -497,7 +497,7 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 p-4 dark:bg-black/70">
       <div className="max-h-[94vh] w-full max-w-6xl overflow-y-auto">{formContent}</div>
     </div>
   );

@@ -6,7 +6,8 @@ function normalize(row) {
     id: row.id,
     number: row.number,
     date: row.date ? new Date(row.date).toISOString().slice(0, 10) : "",
-    client: row.client,
+    client: row.client_name_join || row.client || "",
+    clientId: row.client_id ?? "",
     company: row.company,
     clientResponsible: row.client_responsible,
     technician: row.technician,
@@ -32,12 +33,24 @@ function normalize(row) {
 }
 
 async function findAll() {
-  const [rows] = await pool.query("SELECT * FROM assessments ORDER BY created_at DESC");
+  const [rows] = await pool.query(
+    `SELECT a.*, c.name AS client_name_join
+     FROM assessments a
+     LEFT JOIN clients c ON c.id = a.client_id
+     ORDER BY a.created_at DESC`
+  );
   return rows.map(normalize);
 }
 
 async function findById(id) {
-  const [rows] = await pool.query("SELECT * FROM assessments WHERE id = ? LIMIT 1", [id]);
+  const [rows] = await pool.query(
+    `SELECT a.*, c.name AS client_name_join
+     FROM assessments a
+     LEFT JOIN clients c ON c.id = a.client_id
+     WHERE a.id = ?
+     LIMIT 1`,
+    [id]
+  );
   if (rows.length === 0) return null;
   return normalize(rows[0]);
 }
@@ -48,13 +61,14 @@ async function create(data) {
 
   await pool.query(
     `INSERT INTO assessments
-    (id, number, date, client, company, client_responsible, technician, visit_type, entry_time, exit_time, total_hours, location, module, training_done, detailed_description, problems, solutions, pending, next_steps, notes, technician_signature, client_signature, status, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    (id, number, date, client, client_id, company, client_responsible, technician, visit_type, entry_time, exit_time, total_hours, location, module, training_done, detailed_description, problems, solutions, pending, next_steps, notes, technician_signature, client_signature, status, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       id,
       data.number,
       data.date,
       data.client,
+      data.clientId || null,
       data.company,
       data.clientResponsible,
       data.technician,
@@ -93,6 +107,7 @@ async function update(id, data) {
       number = ?,
       date = ?,
       client = ?,
+      client_id = ?,
       company = ?,
       client_responsible = ?,
       technician = ?,
@@ -118,6 +133,7 @@ async function update(id, data) {
       nextRecord.number,
       nextRecord.date,
       nextRecord.client,
+      nextRecord.clientId || null,
       nextRecord.company,
       nextRecord.clientResponsible,
       nextRecord.technician,
