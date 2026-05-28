@@ -14,30 +14,30 @@ import { formatDuration } from "../utils/time.js";
 function DetailItem({ label, value }) {
   return (
     <div>
-      <dt className="text-sm font-medium text-zinc-500">{label}</dt>
-      <dd className="mt-1 text-sm font-semibold text-zinc-950">{value || "-"}</dd>
+      <dt className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{label}</dt>
+      <dd className="mt-1 text-sm font-semibold text-zinc-950 dark:text-zinc-100">{value || "-"}</dd>
     </div>
   );
 }
 
 function TextBlock({ title, value }) {
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-5">
-      <h3 className="text-sm font-semibold uppercase text-zinc-500">{title}</h3>
-      <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-zinc-700">{value || "-"}</p>
+    <section className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+      <h3 className="text-sm font-semibold uppercase text-zinc-500 dark:text-zinc-400">{title}</h3>
+      <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-zinc-700 dark:text-zinc-300">{value || "-"}</p>
     </section>
   );
 }
 
 function SignaturePreview({ label, signature }) {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-5">
-      <h3 className="text-sm font-semibold text-zinc-950">{label}</h3>
-      <div className="mt-4 flex h-32 items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-zinc-50">
+    <div className="rounded-lg border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
+      <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">{label}</h3>
+      <div className="mt-4 flex h-32 items-center justify-center rounded-lg border border-dashed border-zinc-300 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
         {signature ? (
           <img src={signature} alt={label} className="max-h-24 max-w-full object-contain" />
         ) : (
-          <span className="text-sm text-zinc-500">Assinatura pendente</span>
+          <span className="text-sm text-zinc-500 dark:text-zinc-400">Assinatura pendente</span>
         )}
       </div>
     </div>
@@ -51,7 +51,9 @@ export function AssessmentView() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const assessment = assessments.find((item) => item.id === id);
 
-  if (loading) return <div className="rounded-lg bg-white p-6 text-zinc-600">Carregando...</div>;
+  if (loading) {
+    return <div className="rounded-lg bg-white p-6 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">Carregando...</div>;
+  }
   if (!assessment) return <Navigate to="/404" replace />;
 
   const printElementId = `print-layout-${assessment.id}`;
@@ -98,15 +100,15 @@ export function AssessmentView() {
   return (
     <>
       <div className="space-y-6 no-print">
-        <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-soft">
+        <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-soft dark:border-zinc-800 dark:bg-zinc-900">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
             <div>
               <div className="flex flex-wrap items-center gap-3">
                 <p className="text-sm font-semibold uppercase text-emerald-700">{assessment.number}</p>
                 <StatusBadge status={assessment.status} />
               </div>
-              <h2 className="mt-3 text-2xl font-semibold text-zinc-950">{assessment.client}</h2>
-              <p className="mt-1 text-sm text-zinc-500">{assessment.company}</p>
+              <h2 className="mt-3 text-2xl font-semibold text-zinc-950 dark:text-zinc-100">{assessment.client}</h2>
+              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{assessment.company}</p>
             </div>
 
             <div className="flex flex-wrap gap-2">
@@ -134,10 +136,10 @@ export function AssessmentView() {
           </div>
         </section>
 
-        <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-soft">
+        <section className="rounded-lg border border-zinc-200 bg-white p-5 shadow-soft dark:border-zinc-800 dark:bg-zinc-900">
           <div className="mb-5 flex items-center gap-2">
             <FileText size={19} className="text-emerald-700" />
-            <h3 className="text-lg font-semibold text-zinc-950">Dados do atendimento</h3>
+            <h3 className="text-lg font-semibold text-zinc-950 dark:text-zinc-100">Dados do atendimento</h3>
           </div>
           <dl className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             <DetailItem label="Data" value={formatDate(assessment.date)} />

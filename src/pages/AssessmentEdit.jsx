@@ -25,7 +25,7 @@ export function AssessmentEdit() {
   };
 
   if (loading) {
-    return <div className="rounded-lg bg-white p-6 text-zinc-600">Carregando...</div>;
+    return <div className="rounded-lg bg-white p-6 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">Carregando...</div>;
   }
 
   if (!assessment) {

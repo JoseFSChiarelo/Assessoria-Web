@@ -79,15 +79,15 @@ export function Dashboard() {
 
 
   if (loading) {
-    return <div className="rounded-lg bg-white p-6 text-zinc-600">Carregando...</div>;
+    return <div className="rounded-lg bg-white p-6 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-300">Carregando...</div>;
   }
 
   return (
     <div className="space-y-6">
       {showLaunchPrompt ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 px-4">
-          <section className="w-full max-w-md rounded-xl border border-emerald-200 bg-white p-6 shadow-2xl">
-            <p className="text-base font-semibold text-zinc-900">Lançar assessoria?</p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 px-4 dark:bg-black/70">
+          <section className="w-full max-w-md rounded-xl border border-emerald-200 bg-white p-6 shadow-2xl dark:border-emerald-900 dark:bg-zinc-900">
+            <p className="text-base font-semibold text-zinc-900 dark:text-zinc-100">Lançar assessoria?</p>
             <div className="mt-4 flex justify-end gap-2">
               <Button
                 variant="secondary"
@@ -110,7 +110,7 @@ export function Dashboard() {
           <p className="text-sm font-semibold uppercase text-emerald-700">
             Assessoria técnica digital
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-zinc-950">
+          <h2 className="mt-2 text-xl font-semibold text-zinc-950 dark:text-zinc-100">
             Resumo operacional
           </h2>
         </div>
@@ -158,7 +158,7 @@ export function Dashboard() {
 
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold text-zinc-950">Ultimas assessorias realizadas</h2>
+          <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-100">Ultimas assessorias realizadas</h2>
         </div>
       </div>
 

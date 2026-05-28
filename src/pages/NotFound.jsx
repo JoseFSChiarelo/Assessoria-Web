@@ -3,12 +3,12 @@ import { Button } from "../components/Button.jsx";
 
 export function NotFound() {
   return (
-    <div className="mx-auto max-w-xl rounded-lg border border-zinc-200 bg-white p-8 text-center shadow-soft">
+    <div className="mx-auto max-w-xl rounded-lg border border-zinc-200 bg-white p-8 text-center shadow-soft dark:border-zinc-800 dark:bg-zinc-900">
       <p className="text-sm font-semibold uppercase text-emerald-700">404</p>
-      <h2 className="mt-3 text-2xl font-semibold text-zinc-950">
+      <h2 className="mt-3 text-2xl font-semibold text-zinc-950 dark:text-zinc-100">
         Página não encontrada
       </h2>
-      <p className="mt-3 text-sm leading-6 text-zinc-600">
+      <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
         A assessoria ou rota acessada não existe mais neste ambiente.
       </p>
       <div className="mt-6">

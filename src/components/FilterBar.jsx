@@ -3,7 +3,7 @@ import { statusOptions, visitTypes } from "../data/options.js";
 import { Button } from "./Button.jsx";
 
 const fieldClass =
-  "h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-800 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100";
+  "h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-800 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-emerald-900/40";
 
 export function FilterBar({ filters, onChange, clients = [], technicians = [] }) {
   const update = (field, value) => onChange({ ...filters, [field]: value });
@@ -20,13 +20,13 @@ export function FilterBar({ filters, onChange, clients = [], technicians = [] })
     });
 
   return (
-    <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-soft">
+    <section className="rounded-lg border border-zinc-200 bg-white p-4 shadow-soft dark:border-zinc-800 dark:bg-zinc-900">
       <div className="grid gap-3 lg:grid-cols-[1.3fr_1fr_1fr] xl:grid-cols-[1.4fr_1fr_1fr_0.9fr_0.9fr_1fr_1fr_auto]">
         <label className="relative block">
           <span className="sr-only">Buscar</span>
           <Search
             size={18}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500"
           />
           <input
             className={`${fieldClass} pl-10`}
