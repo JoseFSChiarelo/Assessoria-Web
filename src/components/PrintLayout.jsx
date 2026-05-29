@@ -50,12 +50,10 @@ function Copy({ assessment, copyLabel }) {
         <Field label="Tipo" value={formatVisitType(assessment.visitType)} />
         <Field label="Entrada" value={assessment.entryTime} />
         <Field label="Saída" value={assessment.exitTime} />
-        <Field label="Cliente" value={assessment.client} wide />
         <Field label="Empresa" value={assessment.company} wide />
         <Field label="Responsável" value={assessment.clientResponsible} wide />
         <Field label="Técnico" value={assessment.technician} wide />
         <Field label="Local" value={assessment.location} wide />
-        <Field label="Módulo/Sistema" value={assessment.module} />
         <Field label="Total de horas" value={formatDuration(assessment.totalHours)} />
       </dl>
 
