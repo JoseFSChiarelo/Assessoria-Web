@@ -2,6 +2,7 @@ import { LogOut, Menu, UserRound } from "lucide-react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
+import { ThemeToggle } from "./ThemeToggle.jsx";
 
 function resolveTitle(pathname) {
   if (pathname === "/") return "Dashboard";
@@ -30,40 +31,43 @@ export function Header({ onMenuClick }) {
   };
 
   return (
-    <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/95 backdrop-blur no-print">
+    <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/95 backdrop-blur no-print dark:border-zinc-800 dark:bg-zinc-950/90">
       <div className="flex h-20 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <button
             type="button"
             onClick={onMenuClick}
-            className="rounded-lg border border-zinc-200 bg-white p-2 text-zinc-700 lg:hidden"
+            className="rounded-lg border border-zinc-200 bg-white p-2 text-zinc-700 lg:hidden dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100"
             aria-label="Abrir menu"
           >
             <Menu size={21} />
           </button>
           <div className="min-w-0">
-            <h1 className="truncate text-xl font-semibold text-zinc-950 sm:text-2xl">
+            <h1 className="truncate text-xl font-semibold text-zinc-950 sm:text-2xl dark:text-zinc-100">
               {resolveTitle(location.pathname)}
             </h1>
-            <p className="mt-1 truncate text-sm text-zinc-500">{today}</p>
+            <p className="mt-1 truncate text-sm text-zinc-500 dark:text-zinc-400">{today}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="hidden items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 sm:flex">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-emerald-700">
+          <ThemeToggle />
+          <div className="hidden items-center gap-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 sm:flex dark:border-zinc-700 dark:bg-zinc-900">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-emerald-700 dark:bg-zinc-800">
               <UserRound size={18} />
             </div>
             <div className="max-w-44">
-              <p className="truncate text-sm font-semibold text-zinc-950">
+              <p className="truncate text-sm font-semibold text-zinc-950 dark:text-zinc-100">
                 {user?.name || "Usuário"}
               </p>
-              <p className="truncate text-xs text-zinc-500">{user?.role || "Equipe"}</p>
+              <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+                {user?.role || "Equipe"}
+              </p>
             </div>
           </div>
           <button
             type="button"
             onClick={handleLogout}
-            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
           >
             <LogOut size={20} />
             <span className="hidden sm:inline">Sair</span>

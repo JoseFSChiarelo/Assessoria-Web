@@ -1,16 +1,16 @@
-﻿import { Save, Send } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { Save, Send } from "lucide-react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { statusOptions, systemModules, visitTypes } from "../data/options.js";
-import { calculateTotalHours, formatDuration } from "../utils/time.js";
+import { visitTypes } from "../data/options.js";
+import { calculateTotalHours } from "../utils/time.js";
 import { Button } from "./Button.jsx";
 import { SignatureBlock } from "./SignatureBlock.jsx";
 
 const fieldClass =
-  "mt-1 h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100";
+  "mt-1 h-11 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-emerald-900/40";
 
 const textareaClass =
-  "mt-1 min-h-28 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100";
+  "mt-1 min-h-28 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-emerald-900/40";
 
 function today() {
   return new Date().toISOString().slice(0, 10);
@@ -27,7 +27,6 @@ function emptyAssessment(number) {
   return {
     number: number || "",
     date: today(),
-    client: "",
     company: "",
     clientResponsible: "",
     technician: "",
@@ -36,14 +35,9 @@ function emptyAssessment(number) {
     exitTime: "",
     totalHours: 0,
     location: "",
-    module: "",
-    trainingDone: "",
     detailedDescription: "",
     problems: "",
-    solutions: "",
     pending: "",
-    nextSteps: "",
-    notes: "",
     technicianSignature: "",
     clientSignature: "",
     status: "rascunho",
@@ -63,13 +57,11 @@ function validate(form, strict) {
   const requiredFields = {
     number: "Informe o numero da assessoria.",
     date: "Informe a data.",
-    client: "Informe o cliente.",
     company: "Informe a empresa.",
     clientResponsible: "Informe o responsavel no cliente.",
     technician: "Informe o tecnico responsavel.",
     visitType: "Informe o tipo de atendimento.",
     entryTime: "Informe o horario de entrada.",
-    module: "Informe o modulo ou sistema abordado.",
     detailedDescription: "Descreva o que foi feito.",
   };
 
@@ -84,7 +76,7 @@ function validate(form, strict) {
 function Field({ label, error, children }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-zinc-700">{label}</span>
+      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">{label}</span>
       {children}
       {error ? <span className="mt-1 block text-xs text-rose-600">{error}</span> : null}
     </label>
@@ -119,10 +111,10 @@ function Textarea({ label, error, ...props }) {
 
 function Section({ title, description, children }) {
   return (
-    <section className="border-b border-zinc-200 p-5 last:border-b-0 sm:p-6">
+    <section className="border-b border-zinc-200 p-5 last:border-b-0 sm:p-6 dark:border-zinc-800">
       <div className="mb-5 max-w-3xl">
-        <h2 className="text-lg font-semibold text-zinc-950">{title}</h2>
-        {description ? <p className="mt-1 text-sm text-zinc-500">{description}</p> : null}
+        <h2 className="text-lg font-semibold text-zinc-950 dark:text-zinc-100">{title}</h2>
+        {description ? <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{description}</p> : null}
       </div>
       {children}
     </section>
@@ -151,11 +143,6 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [wizardModal, onCancel]);
 
-  const totalHours = useMemo(
-    () => calculateTotalHours(form.entryTime, form.exitTime),
-    [form.entryTime, form.exitTime],
-  );
-
   const updateField = (field, value) => {
     setForm((current) => {
       const next = { ...current, [field]: value };
@@ -172,15 +159,13 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
       1: {
         number: "Informe o numero da assessoria.",
         date: "Informe a data.",
-        client: "Informe o cliente.",
-        company: "Informe a empresa.",
-        clientResponsible: "Informe o responsavel no cliente.",
+        entryTime: "Informe o horario.",
         technician: "Informe o tecnico responsavel.",
         visitType: "Informe o tipo de atendimento.",
       },
       2: {
-        entryTime: "Informe o horario de entrada.",
-        module: "Informe o modulo ou sistema abordado.",
+        company: "Informe a empresa.",
+        clientResponsible: "Informe o responsavel do cliente.",
       },
       3: {
         detailedDescription: "Descreva o que foi feito.",
@@ -239,17 +224,17 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
   };
 
   const formContent = (
-    <form className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-soft">
-      <div className="border-b border-zinc-200 bg-zinc-50 px-5 py-4 sm:px-6">
+    <form className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-soft dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="border-b border-zinc-200 bg-zinc-50 px-5 py-4 sm:px-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Passo {step} de 4</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Passo {step} de 4</p>
           {onCancel ? (
             <Button type="button" variant="secondary" size="sm" onClick={onCancel}>
               Sair
             </Button>
           ) : null}
         </div>
-        <div className="mt-2 h-2 w-full rounded-full bg-zinc-200">
+        <div className="mt-2 h-2 w-full rounded-full bg-zinc-200 dark:bg-zinc-700">
           <div
             className="h-2 rounded-full bg-emerald-600 transition-all duration-300"
             style={{ width: `${(step / 4) * 100}%` }}
@@ -260,9 +245,9 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
       {step === 1 ? (
         <Section
           title="Dados gerais"
-          description="Identificacao da assessoria, cliente, empresa e responsavel."
+          description="Identificacao da assessoria, data, horario, tecnicos e tipo."
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <Input
               label="Numero da assessoria"
               value={form.number}
@@ -278,28 +263,14 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
               error={errors.date}
             />
             <Input
-              label="Cliente"
-              value={form.client}
-              onChange={(event) => updateField("client", event.target.value)}
-              error={errors.client}
-              placeholder="Nome do cliente"
+              label="Horario"
+              type="time"
+              value={form.entryTime}
+              onChange={(event) => updateField("entryTime", event.target.value)}
+              error={errors.entryTime}
             />
             <Input
-              label="Empresa"
-              value={form.company}
-              onChange={(event) => updateField("company", event.target.value)}
-              error={errors.company}
-              placeholder="Razao social ou unidade"
-            />
-            <Input
-              label="Responsavel no cliente"
-              value={form.clientResponsible}
-              onChange={(event) => updateField("clientResponsible", event.target.value)}
-              error={errors.clientResponsible}
-              placeholder="Nome do responsavel"
-            />
-            <Input
-              label="Tecnico responsavel"
+              label="Tecnicos"
               value={form.technician}
               onChange={(event) => updateField("technician", event.target.value)}
               error={errors.technician}
@@ -317,67 +288,37 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
                 </option>
               ))}
             </Select>
-            <Select
-              label="Status"
-              value={form.status}
-              onChange={(event) => updateField("status", event.target.value)}
-            >
-              {statusOptions.map((status) => (
-                <option key={status.value} value={status.value}>
-                  {status.label}
-                </option>
-              ))}
-            </Select>
           </div>
         </Section>
       ) : null}
 
       {step === 2 ? (
         <Section
-          title="Horarios e local"
-          description="O total de horas e calculado automaticamente pela entrada e saida."
+          title="Dados da visita"
+          description="Empresa, local da visita e responsavel do cliente."
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <Input
-              label="Horario de entrada"
-              type="time"
-              value={form.entryTime}
-              onChange={(event) => updateField("entryTime", event.target.value)}
-              error={errors.entryTime}
+              label="Empresa"
+              value={form.company}
+              onChange={(event) => updateField("company", event.target.value)}
+              error={errors.company}
+              placeholder="Razao social ou unidade"
             />
-            <Input
-              label="Horario de saida"
-              type="time"
-              value={form.exitTime}
-              onChange={(event) => updateField("exitTime", event.target.value)}
-              error={errors.exitTime}
-            />
-            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-              <span className="text-sm font-medium text-zinc-500">Total calculado</span>
-              <strong className="mt-2 block text-2xl font-semibold text-zinc-950">
-                {formatDuration(totalHours)}
-              </strong>
-            </div>
             <Input
               label="Local da visita"
               value={form.location}
               onChange={(event) => updateField("location", event.target.value)}
+              error={errors.location}
               placeholder="Cidade, unidade ou endereco"
             />
-            <Field label="Modulo/Sistema abordado" error={errors.module}>
-              <input
-                className={fieldClass}
-                list="system-modules"
-                value={form.module}
-                onChange={(event) => updateField("module", event.target.value)}
-                placeholder="Selecione ou digite"
-              />
-              <datalist id="system-modules">
-                {systemModules.map((module) => (
-                  <option key={module} value={module} />
-                ))}
-              </datalist>
-            </Field>
+            <Input
+              label="Responsavel do cliente"
+              value={form.clientResponsible}
+              onChange={(event) => updateField("clientResponsible", event.target.value)}
+              error={errors.clientResponsible}
+              placeholder="Nome do responsavel"
+            />
           </div>
         </Section>
       ) : null}
@@ -385,15 +326,9 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
       {step === 3 ? (
         <Section
           title="Conteudo da visita"
-          description="Registre o que foi realizado, treinamentos, problemas e solucoes."
+          description="Registre descricao detalhada, problemas encontrados e pendencias."
         >
           <div className="grid gap-4 lg:grid-cols-2">
-            <Textarea
-              label="Treinamento realizado"
-              value={form.trainingDone}
-              onChange={(event) => updateField("trainingDone", event.target.value)}
-              placeholder="Treinamentos passados ao cliente"
-            />
             <Textarea
               label="Descricao detalhada do que foi feito"
               value={form.detailedDescription}
@@ -405,34 +340,16 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
               label="Problemas encontrados"
               value={form.problems}
               onChange={(event) => updateField("problems", event.target.value)}
+              error={errors.problems}
               placeholder="Dificuldades, falhas ou bloqueios identificados"
-            />
-            <Textarea
-              label="Solucoes aplicadas"
-              value={form.solutions}
-              onChange={(event) => updateField("solutions", event.target.value)}
-              placeholder="Correcao, parametrizacao ou orientacoes"
             />
             <Textarea
               label="Pendencias"
               value={form.pending}
               onChange={(event) => updateField("pending", event.target.value)}
+              error={errors.pending}
               placeholder="Itens que dependem do cliente ou da equipe"
             />
-            <Textarea
-              label="Proximos passos"
-              value={form.nextSteps}
-              onChange={(event) => updateField("nextSteps", event.target.value)}
-              placeholder="Plano para continuidade"
-            />
-            <div className="lg:col-span-2">
-              <Textarea
-                label="Observacoes gerais"
-                value={form.notes}
-                onChange={(event) => updateField("notes", event.target.value)}
-                placeholder="Informacoes complementares"
-              />
-            </div>
           </div>
         </Section>
       ) : null}
@@ -459,7 +376,7 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
         </Section>
       ) : null}
 
-      <div className="flex flex-col gap-3 border-t border-zinc-200 bg-zinc-50 p-5 sm:flex-row sm:justify-end">
+      <div className="flex flex-col gap-3 border-t border-zinc-200 bg-zinc-50 p-5 sm:flex-row sm:justify-end dark:border-zinc-800 dark:bg-zinc-900">
         {step > 1 ? (
           <Button type="button" variant="secondary" onClick={() => setStep((s) => Math.max(1, s - 1))}>
             Voltar
@@ -497,7 +414,7 @@ export function AssessmentForm({ initialData, nextNumber, onSubmit, wizardModal 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/45 p-4 dark:bg-black/70">
       <div className="max-h-[94vh] w-full max-w-6xl overflow-y-auto">{formContent}</div>
     </div>
   );
