@@ -59,7 +59,7 @@ function Copy({ assessment, copyLabel }) {
         <Field label="Total de horas" value={formatDuration(assessment.totalHours)} />
       </dl>
 
-      <div className="mt-3 flex flex-1 flex-col gap-3 text-[10px] leading-4">
+      <div className="mt-3 flex flex-1 flex-col gap-3 text-[7px] leading-4">
         <div>
           <p className="font-bold uppercase text-zinc-700">Descrição do atendimento</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
