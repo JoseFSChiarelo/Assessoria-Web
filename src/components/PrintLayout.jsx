@@ -59,28 +59,22 @@ function Copy({ assessment, copyLabel }) {
         <Field label="Total de horas" value={formatDuration(assessment.totalHours)} />
       </dl>
 
-      <div className="mt-3 grid flex-1 grid-cols-2 gap-3 text-[10px] leading-4">
+      <div className="mt-3 grid flex-1 grid-cols-1 gap-3 text-[10px] leading-3.5">
         <div>
-          <p className="font-bold uppercase text-zinc-700">Treinamento realizado</p>
-          <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
-            {assessment.trainingDone || "-"}
-          </p>
-        </div>
-        <div>
-          <p className="font-bold uppercase text-zinc-700">Descrição do atendimento</p>
+          <p className="font-semibold uppercase text-zinc-700  ">Descrição Da Assessoria</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
             {assessment.detailedDescription || "-"}
           </p>
         </div>
         <div>
-          <p className="font-bold uppercase text-zinc-700">Problemas e soluções</p>
+          <p className="font-semibold uppercase text-zinc-700">Problemas e Soluções</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
             {[assessment.problems, assessment.solutions].filter(Boolean).join(" | ") ||
               "-"}
           </p>
         </div>
         <div>
-          <p className="font-bold uppercase text-zinc-700">Pendências e próximos passos</p>
+          <p className="font-semibold uppercase text-zinc-700">Pendências</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
             {[assessment.pending, assessment.nextSteps].filter(Boolean).join(" | ") ||
               "-"}
@@ -101,7 +95,7 @@ export function PrintLayout({ assessment, elementId }) {
     <div id={elementId} className="print-sheet bg-white p-[8mm] text-zinc-950">
       <Copy assessment={assessment} copyLabel="Via da empresa" />
       <div className="flex h-[13mm] items-center justify-center text-[9px] font-semibold uppercase text-zinc-500">
-        Corte aqui · cópia para o cliente
+        |------------------------------------- Corte aqui -------------------------------------------|
       </div>
       <Copy assessment={assessment} copyLabel="Via do cliente" />
     </div>
