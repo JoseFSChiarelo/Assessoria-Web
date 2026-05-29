@@ -61,12 +61,6 @@ function Copy({ assessment, copyLabel }) {
 
       <div className="mt-3 grid flex-1 grid-cols-2 gap-3 text-[10px] leading-4">
         <div>
-          <p className="font-bold uppercase text-zinc-700">Treinamento realizado</p>
-          <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
-            {assessment.trainingDone || "-"}
-          </p>
-        </div>
-        <div>
           <p className="font-bold uppercase text-zinc-700">Descrição do atendimento</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
             {assessment.detailedDescription || "-"}
