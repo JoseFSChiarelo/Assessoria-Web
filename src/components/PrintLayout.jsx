@@ -61,20 +61,20 @@ function Copy({ assessment, copyLabel }) {
 
       <div className="mt-3 flex flex-1 flex-col gap-3 text-[7px] leading-4">
         <div>
-          <p className="font-bold uppercase text-zinc-700">Descrição do atendimento</p>
+          <p className="font-bold uppercase text-zinc-700 text-[9px]">Descrição do atendimento</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
             {assessment.detailedDescription || "-"}
           </p>
         </div>
         <div>
-          <p className="font-bold uppercase text-zinc-700">Problemas e soluções</p>
+          <p className="font-bold uppercase text-zinc-700 text-[9px]">Problemas e soluções</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
             {[assessment.problems, assessment.solutions].filter(Boolean).join(" | ") ||
               "-"}
           </p>
         </div>
         <div>
-          <p className="font-bold uppercase text-zinc-700">Pendências e próximos passos</p>
+          <p className="font-bold uppercase text-zinc-700 text-[9px]">Pendências e próximos passos</p>
           <p className="mt-1 min-h-8 border border-zinc-300 p-1.5">
             {[assessment.pending, assessment.nextSteps].filter(Boolean).join(" | ") ||
               "-"}
