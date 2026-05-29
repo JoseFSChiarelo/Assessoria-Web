@@ -1,4 +1,5 @@
 import brandMark from "../assets/brand-mark.svg";
+import Logo from "../assets/LOGO EXENS.png ";  
 import { formatDate, formatVisitType } from "../utils/formatters.js";
 import { formatDuration } from "../utils/time.js";
 
@@ -31,10 +32,10 @@ function Copy({ assessment, copyLabel }) {
     <section className="flex h-[134mm] flex-col overflow-hidden border border-zinc-900 p-[5mm]">
       <header className="flex items-start justify-between gap-4 border-b border-zinc-900 pb-2">
         <div className="flex items-center gap-3">
-          <img src={brandMark} alt="Assessoria Web" className="h-10 w-10" />
+          <img src={Logo} alt="Assessoria Web" className="h-10 w-10" />
           <div>
             <h2 className="text-sm font-bold uppercase text-zinc-950">
-              Ficha de Assessoria Técnica
+              Ficha de Assessoria
             </h2>
             <p className="text-[10px] text-zinc-600">{copyLabel}</p>
           </div>
@@ -53,7 +54,6 @@ function Copy({ assessment, copyLabel }) {
         <Field label="Empresa" value={assessment.company} wide />
         <Field label="Responsável" value={assessment.clientResponsible} wide />
         <Field label="Técnico" value={assessment.technician} wide />
-        <Field label="Local" value={assessment.location} wide />
         <Field label="Total de horas" value={formatDuration(assessment.totalHours)} />
       </dl>
 
