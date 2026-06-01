@@ -1,5 +1,5 @@
 import brandMark from "../assets/brand-mark.svg";
-import Logo from "../assets/LOGO EXENS.png ";  
+import Logo from "../assets/logo-pequena.png";
 import { formatDate, formatVisitType } from "../utils/formatters.js";
 import { formatDuration } from "../utils/time.js";
 
