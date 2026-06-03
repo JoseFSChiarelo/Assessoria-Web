@@ -80,13 +80,20 @@ export function AssessmentView() {
   };
 
   const handlePrint = async () => {
-    try {
-      await markPrinted(assessment.id);
-      toast.success("Ficha marcada como impressa.");
-      window.setTimeout(() => window.print(), 150);
-    } catch (error) {
-      toast.error(error.message);
-    }
+    toast.dismiss();
+    window.addEventListener(
+      "afterprint",
+      async () => {
+        try {
+          await markPrinted(assessment.id);
+          toast.success("Ficha marcada como impressa.");
+        } catch (error) {
+          toast.error(error.message);
+        }
+      },
+      { once: true }
+    );
+    window.print();
   };
 
   const handlePdf = () => {

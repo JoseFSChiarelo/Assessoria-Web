@@ -20,12 +20,17 @@ export function AssessmentTable({
   pageSize = 8,
   showPagination = true,
   emptyMessage = "Nenhuma assessoria encontrada.",
+  selectable = false,
+  selectedIds = [],
+  onToggleSelection,
+  onToggleVisibleSelection,
 }) {
   const [page, setPage] = useState(1);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(selectable);
   const pageCount = Math.max(1, Math.ceil(assessments.length / pageSize));
   const expand = () => setIsExpanded(true);
   const collapse = () => setIsExpanded(false);
+  const selectedIdSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
   useEffect(() => {
     setPage(1);
@@ -36,6 +41,13 @@ export function AssessmentTable({
     const start = (page - 1) * pageSize;
     return assessments.slice(start, start + pageSize);
   }, [assessments, page, pageSize, showPagination]);
+  const visibleIds = useMemo(
+    () => visibleAssessments.map((assessment) => assessment.id),
+    [visibleAssessments]
+  );
+  const allVisibleSelected =
+    visibleIds.length > 0 && visibleIds.every((id) => selectedIdSet.has(id));
+  const someVisibleSelected = visibleIds.some((id) => selectedIdSet.has(id));
 
   return (
     <section
@@ -58,6 +70,21 @@ export function AssessmentTable({
         <table className="min-w-full">
           <thead className="bg-zinc-50 dark:bg-zinc-800">
             <tr>
+              {selectable ? (
+                <th className="w-12 px-4 py-3 text-left">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-zinc-300 text-emerald-700 focus:ring-emerald-600"
+                    checked={allVisibleSelected}
+                    ref={(input) => {
+                      if (input) input.indeterminate = !allVisibleSelected && someVisibleSelected;
+                    }}
+                    aria-label="Selecionar atendimentos visiveis"
+                    onChange={() => onToggleVisibleSelection?.(visibleIds, !allVisibleSelected)}
+                    onClick={(event) => event.stopPropagation()}
+                  />
+                </th>
+              ) : null}
               {columns.map((heading) => (
                 <th
                   key={heading || "actions"}
@@ -98,6 +125,17 @@ export function AssessmentTable({
                         transition={{ duration: 0.18 + index * 0.03 }}
                         className="hover:bg-zinc-50 dark:hover:bg-zinc-800/70"
                       >
+                        {selectable ? (
+                          <td className="whitespace-nowrap px-4 py-4">
+                            <input
+                              type="checkbox"
+                              className="h-4 w-4 rounded border-zinc-300 text-emerald-700 focus:ring-emerald-600"
+                              checked={selectedIdSet.has(assessment.id)}
+                              aria-label={`Selecionar ${assessment.number}`}
+                              onChange={() => onToggleSelection?.(assessment.id)}
+                            />
+                          </td>
+                        ) : null}
                         <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
                           {assessment.number}
                         </td>

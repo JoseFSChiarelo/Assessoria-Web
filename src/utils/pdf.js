@@ -22,12 +22,21 @@ export async function exportElementToPdf(elementId, fileName) {
   const pageWidth = pdf.internal.pageSize.getWidth();
   const pageHeight = pdf.internal.pageSize.getHeight();
   const imageProps = pdf.getImageProperties(image);
-  const ratio = Math.min(pageWidth / imageProps.width, pageHeight / imageProps.height);
+  const ratio = pageWidth / imageProps.width;
   const imageWidth = imageProps.width * ratio;
   const imageHeight = imageProps.height * ratio;
-  const x = (pageWidth - imageWidth) / 2;
-  const y = (pageHeight - imageHeight) / 2;
+  const pageOverflowTolerance = 2;
+  const pageCount = Math.ceil(
+    Math.max(imageHeight - pageOverflowTolerance, pageHeight) / pageHeight
+  );
 
-  pdf.addImage(image, "PNG", x, y, imageWidth, imageHeight);
+  for (let pageIndex = 0; pageIndex < pageCount; pageIndex += 1) {
+    if (pageIndex > 0) {
+      pdf.addPage();
+    }
+    const y = -pageIndex * pageHeight;
+    pdf.addImage(image, "PNG", 0, y, imageWidth, imageHeight);
+  }
+
   pdf.save(fileName);
 }

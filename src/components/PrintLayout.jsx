@@ -1,7 +1,10 @@
-import brandMark from "../assets/brand-mark.svg";
 import Logo from "../assets/logo-pequena.png";
 import { formatDate, formatVisitType } from "../utils/formatters.js";
 import { formatDuration } from "../utils/time.js";
+
+function hasText(value) {
+  return Boolean(String(value || "").trim());
+}
 
 function Field({ label, value, wide = false }) {
   return (
@@ -27,10 +30,42 @@ function SignatureLine({ label, signature }) {
   );
 }
 
-function Copy({ assessment, copyLabel }) {
+function TextSection({ title, value }) {
   return (
-    <section className="flex h-[134mm] flex-col overflow-hidden border border-zinc-900 p-[5mm]">
-      <header className="flex items-start justify-between gap-4 border-b border-zinc-900 pb-2">
+    <div className="print-section">
+      <p className="font-bold uppercase text-zinc-700">{title}</p>
+      <div className="mt-1 min-h-[16mm] whitespace-pre-wrap break-words border border-zinc-300 p-1.5 text-[9px] leading-4">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+function Copy({ assessment, copyLabel }) {
+  const problemsAndSolutions = [assessment.problems, assessment.solutions]
+    .filter(hasText)
+    .join("\n\n");
+  const pendingAndNextSteps = [assessment.pending, assessment.nextSteps]
+    .filter(hasText)
+    .join("\n\n");
+  const sections = [
+    {
+      title: "Descrição do atendimento",
+      value: assessment.detailedDescription
+    },
+    {
+      title: "Problemas e soluções",
+      value: problemsAndSolutions
+    },
+    {
+      title: "Pendências e próximos passos",
+      value: pendingAndNextSteps
+    }
+  ].filter((section) => hasText(section.value));
+
+  return (
+    <section className="assessment-copy flex flex-col border border-zinc-900 p-[5mm]">
+      <header className="print-section flex items-start justify-between gap-4 border-b border-zinc-900 pb-2">
         <div className="flex items-center gap-3">
           <img src={Logo} alt="Assessoria Web" className="h-10 w-10" />
           <div>
@@ -46,7 +81,7 @@ function Copy({ assessment, copyLabel }) {
         </div>
       </header>
 
-      <dl className="mt-3 grid grid-cols-4 gap-x-3 gap-y-2">
+      <dl className="print-section mt-3 grid grid-cols-4 gap-x-3 gap-y-2">
         <Field label="Data" value={formatDate(assessment.date)} />
         <Field label="Tipo" value={formatVisitType(assessment.visitType)} />
         <Field label="Entrada" value={assessment.entryTime} />
@@ -57,30 +92,19 @@ function Copy({ assessment, copyLabel }) {
         <Field label="Total de horas" value={formatDuration(assessment.totalHours)} />
       </dl>
 
-      <div className="mt-3 flex flex-1 flex-col gap-3 text-[7px] leading-4">
-        <div>
-          <p className="font-bold uppercase text-zinc-700">Descrição do atendimento</p>
-          <p className="mt-1 min-h-8 border border-zinc-300 p-1.5 text-[9px]">
-            {assessment.detailedDescription || "-"}
-          </p>
+      {sections.length > 0 ? (
+        <div className="mt-3 flex flex-col gap-3 text-[7px] leading-4">
+          {sections.map((section) => (
+            <TextSection
+              key={section.title}
+              title={section.title}
+              value={section.value}
+            />
+          ))}
         </div>
-        <div>
-          <p className="font-bold uppercase text-zinc-700">Problemas e soluções</p>
-          <p className="mt-1 min-h-8 border border-zinc-300 p-1.5 text-[9px]">
-            {[assessment.problems, assessment.solutions].filter(Boolean).join(" | ") ||
-              "-"}
-          </p>
-        </div>
-        <div>
-          <p className="font-bold uppercase text-zinc-700">Pendências e próximos passos</p>
-          <p className="mt-1 min-h-8 border border-zinc-300 p-1.5 text-[9px]">
-            {[assessment.pending, assessment.nextSteps].filter(Boolean).join(" | ") ||
-              "-"}
-          </p>
-        </div>
-      </div>
+      ) : null}
 
-      <div className="mt-4 grid grid-cols-2 gap-10">
+      <div className="signature-block grid grid-cols-2 gap-10 pt-4">
         <SignatureLine label="Assinatura do técnico" signature={assessment.technicianSignature} />
         <SignatureLine label="Assinatura do cliente" signature={assessment.clientSignature} />
       </div>
@@ -91,11 +115,19 @@ function Copy({ assessment, copyLabel }) {
 export function PrintLayout({ assessment, elementId }) {
   return (
     <div id={elementId} className="print-sheet bg-white p-[8mm] text-zinc-950">
-      <Copy assessment={assessment} copyLabel="Via da empresa" />
-      <div className="flex h-[13mm] items-center justify-center text-[9px] font-semibold uppercase text-zinc-500">
-        Corte aqui · cópia para o cliente
-      </div>
-      <Copy assessment={assessment} copyLabel="Via do cliente" />
+      <Copy assessment={assessment} copyLabel="Via única" />
+    </div>
+  );
+}
+
+export function BatchPrintLayout({ assessments, elementId }) {
+  return (
+    <div id={elementId} className="print-sheet bg-white p-[8mm] text-zinc-950">
+      {assessments.map((assessment) => (
+        <div key={assessment.id} className="print-page">
+          <Copy assessment={assessment} copyLabel="Via única" />
+        </div>
+      ))}
     </div>
   );
 }

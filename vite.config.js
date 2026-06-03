@@ -9,7 +9,7 @@ export default defineConfig({
     allowedHosts: ["assessoria.exens.com.br"],
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:3334",
+        target: "http://127.0.0.1:3335",
         changeOrigin: true,
       },
     },

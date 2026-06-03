@@ -71,7 +71,8 @@ textarea {
     min-height: auto;
   }
 
-  .no-print {
+  .no-print,
+  [data-rht-toaster] {
     display: none !important;
   }
 
@@ -85,7 +86,7 @@ textarea {
     left: auto !important;
     top: auto !important;
     width: 210mm !important;
-    min-height: 297mm !important;
+    min-height: auto !important;
     pointer-events: auto;
   }
 
@@ -93,5 +94,21 @@ textarea {
     box-shadow: none !important;
     margin: 0 !important;
     border: 0 !important;
+  }
+
+  .assessment-copy {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .print-section,
+  .signature-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-page:not(:last-child) {
+    break-after: page;
+    page-break-after: always;
   }
 }

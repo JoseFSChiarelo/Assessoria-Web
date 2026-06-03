@@ -60,6 +60,14 @@ export function useAssessments() {
     [refresh]
   );
 
+  const markManyPrinted = useCallback(
+    async (ids) => {
+      await Promise.all(ids.map((id) => assessmentRepository.markPrinted(id)));
+      await refresh();
+    },
+    [refresh]
+  );
+
   return {
     assessments,
     loading,
@@ -68,6 +76,7 @@ export function useAssessments() {
     updateAssessment,
     removeAssessment,
     duplicateAssessment,
-    markPrinted
+    markPrinted,
+    markManyPrinted
   };
 }
